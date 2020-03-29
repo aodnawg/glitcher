@@ -1,16 +1,20 @@
 import React from "react";
 
-import { Box, Text } from "@chakra-ui/core";
+import { Flex, Heading, IconButton, Box } from "@chakra-ui/core";
 
 const Header = () => {
   return (
-    <header>
-      <Box w="100%" textAlign="center">
-        <Text fontSize="4xl" fontWeight="800" fontFamily="Open Sans">
-          GLITCHER
-        </Text>
-      </Box>
-    </header>
+    <Flex as="header" padding="1.5rem" bg="black" mb="2rem">
+      <Heading
+        as="h1"
+        size="lg"
+        fontWeight="800"
+        color="white"
+        fontFamily="Open Sans"
+      >
+        GLITCHER
+      </Heading>
+    </Flex>
   );
 };
 

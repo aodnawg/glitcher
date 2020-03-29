@@ -13,6 +13,10 @@
       href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <script id="vertexShader" type="x-shader/x-vertex">
@@ -41,15 +45,15 @@
           noise = noise*2.-1.;
           noise *= hash11(u_time);
           st += noise*u_value2*.5;
-          float r = texture2D(u_texture,st+vec2(1.,0.)*u_value3).r;
+          float r = texture2D(u_texture,st+vec2(1.,0.)*u_value3*.2).r;
           float g = texture2D(u_texture,st+vec2(0.,0.)).g;
-          float b = texture2D(u_texture,st+vec2(0.,1.)*u_value3).b;
+          float b = texture2D(u_texture,st+vec2(0.,1.)*u_value3*.2).b;
           gl_FragColor = vec4(r, g, b, 1.);
       }
     </script>
 
     <div id="app"></div>
-    <img src="assets/sample.png" id="tex" />
+    <img src="assets/sample.jpg" id="tex" />
 
     <script src="index.tsx"></script>
   </body>
