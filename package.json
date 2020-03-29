@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel ./src/index.html",
-    "build": "parcel build ./src/index.html -d docs --public-url .",
+    "build": "parcel build ./src/index.html -d docs --public-url https://aodnawg.github.io/glitcher/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

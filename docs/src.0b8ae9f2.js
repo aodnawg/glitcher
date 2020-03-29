@@ -544,4 +544,4 @@ module.exports=function(){var e=document.getSelection();if(!e.rangeCount)return 
 },{"react":"n8MK","@chakra-ui/core":"w4KE","./Canvas":"lu1a","./components/Header":"qWdD","./components/Footer":"h6X1","./components/Content":"LTwW"}],"zo2T":[function(require,module,exports) {
 "use strict";var e=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});var t=e(require("react-dom")),r=e(require("react")),u=e(require("./App"));t.default.render(r.default.createElement(u.default,null),document.getElementById("app"));
 },{"react-dom":"NKHc","react":"n8MK","./App":"NHn6"}]},{},["zo2T"], null)
-//# sourceMappingURL=src.0b8ae9f2.js.map
+//# sourceMappingURL=https://aodnawg.github.io/glitcher/src.0b8ae9f2.js.map
