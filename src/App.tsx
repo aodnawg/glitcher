@@ -4,6 +4,7 @@ import { ThemeProvider, ColorModeProvider } from "@chakra-ui/core";
 
 import Canvas from "./Canvas";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Content from "./components/Content";
 
 const App = () => {
@@ -14,6 +15,7 @@ const App = () => {
         <Content>
           <Canvas />
         </Content>
+        <Footer />
       </ColorModeProvider>
     </ThemeProvider>
   );

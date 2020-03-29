@@ -5,7 +5,7 @@ import { Box } from "@chakra-ui/core";
 const Content: React.FC = ({ children }) => {
   return (
     <main>
-      <Box h={"256px"}>{children}</Box>
+      <Box>{children}</Box>
     </main>
   );
 };
