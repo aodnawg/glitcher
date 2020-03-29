@@ -8,7 +8,14 @@ export interface Uniform {
   value: any;
 }
 
-export type UniformsKeys = "u_time" | "u_resolution" | "u_mouse" | "u_texture";
+export type UniformsKeys =
+  | "u_time"
+  | "u_resolution"
+  | "u_mouse"
+  | "u_texture"
+  | "u_value1"
+  | "u_value2"
+  | "u_value3";
 
 export type Uniforms = { [key in UniformsKeys]: Uniform };
 
@@ -25,6 +32,9 @@ export const initUniforms = (): Uniforms => {
     u_time: { type: "f", value: 1.0 },
     u_resolution: { type: "v2", value: new Vector2() },
     u_mouse: { type: "v2", value: new Vector2() },
-    u_texture: { type: "sampler2D", value: getSampleTex() }
+    u_texture: { type: "sampler2D", value: getSampleTex() },
+    u_value1: { type: "f", value: 0.5 },
+    u_value2: { type: "f", value: 0.5 },
+    u_value3: { type: "f", value: 0.5 }
   };
 };

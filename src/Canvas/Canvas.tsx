@@ -1,12 +1,14 @@
 import React from "react";
-import { Box } from "@chakra-ui/core";
+import { Box, Button, Flex } from "@chakra-ui/core";
 
 import useInit from "./hooks/useInit";
 import useAnimate from "./hooks/useAnimate";
 import useTextureLoader from "./hooks/useTextureLoader";
 
-import { initUniforms } from "./uniforms";
+import { initUniforms, UniformsKeys } from "./uniforms";
 import initThreeObjects from "./initThreeObjects";
+
+import { makeSliders } from "../components/Slider";
 
 const getFileFromEvent = (ev: React.DragEvent) => ev.dataTransfer.files[0];
 
@@ -38,16 +40,33 @@ export const Canvas = () => {
     link.click();
   };
 
+  const adjustableUniformKeys: UniformsKeys[] = [
+    "u_value1",
+    "u_value2",
+    "u_value3"
+  ];
+
+  const uiHandlers = adjustableUniformKeys.map(key => (val: number) =>
+    (uniforms[key].value = val)
+  );
+
   return (
     <>
-      <Box
-        h="70vw"
-        w="70vw"
-        ref={canvasWrapperRef}
-        onDragOver={dragOverHandler}
-        onDrop={dropHandler}
-      />
-      <Box onClick={downloadButtonHandler}>DOWNLOAD</Box>
+      <Flex align="center" justify="center">
+        <Box
+          h="70vw"
+          w="70vw"
+          ref={canvasWrapperRef}
+          onDragOver={dragOverHandler}
+          onDrop={dropHandler}
+        />
+      </Flex>
+      <Box w="70vw" m="3vw 15vw">
+        {makeSliders(uiHandlers)}
+      </Box>
+      <Flex align="center" justify="center">
+        <Button onClick={downloadButtonHandler}>DOWNLOAD</Button>
+      </Flex>
     </>
   );
 };

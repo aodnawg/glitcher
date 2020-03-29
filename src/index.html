@@ -3,12 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>GLITCHER</title>
     <style>
       #tex {
         display: none;
       }
     </style>
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <script id="vertexShader" type="x-shader/x-vertex">
@@ -21,6 +25,9 @@
       uniform vec2 u_resolution;
       uniform float u_time;
       uniform sampler2D u_texture;
+      uniform float u_value1;
+      uniform float u_value2;
+      uniform float u_value3;
       vec2 hash22(vec2 p) {
         float n = sin(dot(p, vec2(41, 289)));
         return fract(vec2(262144, 32768)*n);
@@ -28,13 +35,16 @@
       float hash11(float p) {
         return fract(sin(p*98.8721)*48.1823);
       }
-
       void main() {
           vec2 st = gl_FragCoord.xy/u_resolution.xy;
-          vec2 noise = hash22(floor(st*vec2(1., 32.)));
-          noise *= step(.5, hash11(floor(u_time)))*sin(hash11(u_time));
-          st += noise;
-          gl_FragColor = texture2D(u_texture,st);
+          vec2 noise = hash22(floor(st*vec2(1., 128.*u_value1)));
+          noise = noise*2.-1.;
+          noise *= hash11(u_time);
+          st += noise*u_value2*.5;
+          float r = texture2D(u_texture,st+vec2(1.,0.)*u_value3).r;
+          float g = texture2D(u_texture,st+vec2(0.,0.)).g;
+          float b = texture2D(u_texture,st+vec2(0.,1.)*u_value3).b;
+          gl_FragColor = vec4(r, g, b, 1.);
       }
     </script>
 
