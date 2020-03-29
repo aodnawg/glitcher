@@ -5,7 +5,7 @@ const initScene = (): THREE.Scene => {
 };
 
 const initRenderer = (): THREE.WebGLRenderer => {
-  return new THREE.WebGLRenderer();
+  return new THREE.WebGLRenderer({ preserveDrawingBuffer: true });
 };
 
 const initCamera = (): THREE.Camera => {
