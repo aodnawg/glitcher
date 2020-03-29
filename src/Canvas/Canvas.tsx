@@ -2,10 +2,10 @@ import React from "react";
 
 import useInit from "./hooks/useInit";
 import useAnimate from "./hooks/useAnimate";
-import useResize from "./hooks/useResize";
 
 import { initUniforms } from "./uniforms";
 import initThreeObjects from "./initThreeObjects";
+import { Box } from "@chakra-ui/core";
 
 export const Canvas = () => {
   const uniforms = initUniforms();
@@ -13,7 +13,6 @@ export const Canvas = () => {
 
   const cnvsRef = useInit(scene, renderer, uniforms);
   useAnimate(scene, renderer, uniforms, camera);
-  useResize(renderer, uniforms);
 
-  return <div ref={cnvsRef} />;
+  return <Box h="100px" ref={cnvsRef} />;
 };

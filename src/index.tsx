@@ -2,11 +2,16 @@ import ReactDOM from "react-dom";
 import React from "react";
 
 import Canvas from "./Canvas";
+import Header from "./components/Header";
+import Content from "./components/Content";
 
 const App = () => {
   return (
     <>
-      <Canvas />
+      <Header />
+      <Content>
+        <Canvas />
+      </Content>
     </>
   );
 };

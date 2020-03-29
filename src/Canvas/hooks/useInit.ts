@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 import { Uniforms } from "../uniforms";
+import { resize } from "../resize";
 
 const init = (
   container: Element,
@@ -32,9 +33,18 @@ const useInit = (
 ) => {
   const cnvsRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (cnvsRef.current !== null) {
-      init(cnvsRef.current, scene, renderer, uniforms);
+    if (cnvsRef.current === null) {
+      return;
     }
+
+    init(cnvsRef.current, scene, renderer, uniforms);
+    console.log(cnvsRef.current);
+    const resize_ = () => resize(cnvsRef.current!, renderer, uniforms);
+    resize_();
+    window.addEventListener("resize", resize_, false);
+    return () => {
+      window.removeEventListener("resize", resize_, false);
+    };
   }, []);
   return cnvsRef;
 };
