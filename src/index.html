@@ -4,9 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      #tex {
+        display: none;
+      }
+    </style>
   </head>
   <body>
     <script id="vertexShader" type="x-shader/x-vertex">
+      uniform sampler2D u_texture;
       void main() {
           gl_Position = vec4( position, 1.0 );
       }
@@ -14,14 +20,27 @@
     <script id="fragmentShader" type="x-shader/x-fragment">
       uniform vec2 u_resolution;
       uniform float u_time;
+      uniform sampler2D u_texture;
+      vec2 hash22(vec2 p) {
+        float n = sin(dot(p, vec2(41, 289)));
+        return fract(vec2(262144, 32768)*n);
+      }
+      float hash11(float p) {
+        return fract(sin(p*98.8721)*48.1823);
+      }
 
       void main() {
           vec2 st = gl_FragCoord.xy/u_resolution.xy;
-          gl_FragColor=vec4(st.x,st.y,0.0,1.0);
+          vec2 noise = hash22(floor(st*vec2(1., 32.)));
+          noise *= step(.5, hash11(floor(u_time)))*sin(hash11(u_time));
+          st += noise;
+          gl_FragColor = texture2D(u_texture,st);
       }
     </script>
 
     <div id="app"></div>
+    <img src="assets/sample.png" id="tex" />
+
     <script src="index.tsx"></script>
   </body>
 </html>

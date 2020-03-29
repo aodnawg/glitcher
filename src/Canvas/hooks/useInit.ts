@@ -38,7 +38,6 @@ const useInit = (
     }
 
     init(cnvsRef.current, scene, renderer, uniforms);
-    console.log(cnvsRef.current);
     const resize_ = () => resize(cnvsRef.current!, renderer, uniforms);
     resize_();
     window.addEventListener("resize", resize_, false);
