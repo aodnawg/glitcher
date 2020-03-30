@@ -9,7 +9,7 @@ const render = (
   scene: THREE.Scene,
   camera: THREE.Camera
 ) => {
-  uniforms.u_time.value += 0.05;
+  uniforms.iTime.value += 0.05;
   renderer.render(scene, camera);
 };
 

@@ -9,8 +9,8 @@ export interface Uniform {
 }
 
 export type UniformsKeys =
-  | "u_time"
-  | "u_resolution"
+  | "iTime"
+  | "iResolution"
   | "u_mouse"
   | "u_texture"
   | "u_value1"
@@ -29,8 +29,8 @@ const getSampleTex = () => {
 
 export const initUniforms = (): Uniforms => {
   return {
-    u_time: { type: "f", value: 1.0 },
-    u_resolution: { type: "v2", value: new Vector2() },
+    iTime: { type: "f", value: 1.0 },
+    iResolution: { type: "v2", value: new Vector2() },
     u_mouse: { type: "v2", value: new Vector2() },
     u_texture: { type: "sampler2D", value: getSampleTex() },
     u_value1: { type: "f", value: 0.5 },
