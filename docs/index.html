@@ -1,89 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GLITCHER</title>
-    <meta
-      property="og:url"
-      content="https://aodnawg.github.io/glitcher/index.html"
-    />
-    <meta property="og:title" content="GLITCHER" />
-    <meta
-      property="og:image"
-      content="https://aodnawg.github.io/glitcher/ogp.6ed7aea3.jpg"
-    />
-    <meta property="og:description" content="GLITCHER" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="@aodnawg" />
-    <style>
-      #tex {
-        display: none;
-      }
-    </style>
-    <link
-      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <script id="vertexShader" type="x-shader/x-vertex">
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>GLITCHER</title><meta property="og:url" content="https://aodnawg.github.io/glitcher/index.html"><meta property="og:title" content="GLITCHER"><meta property="og:image" content="https://aodnawg.github.io/glitcher/ogp.6ed7aea3.jpg"><meta property="og:description" content="GLITCHER"><meta name="twitter:card" content="summary"><meta name="twitter:site" content="@aodnawg"><style>#tex{display:none}</style><link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" rel="stylesheet"></head><body> <script id="vertexShader" type="x-shader/x-vertex">
       uniform sampler2D u_texture;
       void main() {
           gl_Position = vec4( position, 1.0 );
       }
-    </script>
-    <!-- <script id="fragmentShader" type="x-shader/x-fragment">
+    </script> <script id="fragmentShader" type="x-shader/x-fragment">
       uniform vec2 iResolution;
       uniform float iTime;
       uniform sampler2D u_texture;
       uniform float u_value1;
       uniform float u_value2;
       uniform float u_value3;
-      vec2 hash22(vec2 p) {
-        float n = sin(dot(p, vec2(41, 289)));
-        return fract(vec2(262144, 32768)*n);
-      }
-      float hash11(float p) {
-        return fract(sin(p*98.8721)*48.1823);
-      }
-      void main() {
-          vec2 st = gl_FragCoord.xy/iResolution.xy;
-          vec2 noise = hash22(floor(st*vec2(1., 128.*u_value1)));
-          noise = noise*2.-1.;
-          noise *= hash11(iTime);
-          st += noise*u_value2*.5;
-          float r = texture2D(u_texture,st+vec2(1.,0.)*u_value3*.2).r;
-          float g = texture2D(u_texture,st+vec2(0.,0.)).g;
-          float b = texture2D(u_texture,st+vec2(0.,1.)*u_value3*.2).b;
-          gl_FragColor = vec4(r, g, b, 1.);
-      }
-    </script> -->
-
-    <script id="fragmentShader" type="x-shader/x-fragment">
-      uniform vec2 iResolution;
-      uniform float iTime;
-      uniform sampler2D u_texture;
-      uniform float u_value1;
-      uniform float u_value2;
-      uniform float u_value3;
-
-
-      precision highp float;
-
-      uniform vec2 resolution;
-      uniform float time;
 
       #define MIN_SURF 0.001
       #define MAX_DIST 100.
       #define MAX_LOOP 1000
 
-      #define iResolution resolution
-      #define iTime time
       void mainImage(out vec4 fragColor, in vec2 fragCoord);
       void main(void) {
         mainImage(gl_FragColor, gl_FragCoord.xy);
@@ -136,10 +67,17 @@
       	return g;
       }
 
+      float sdBox( vec3 p, vec3 b )
+      {
+        vec3 q = abs(p) - b;
+        return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0);
+      }
+
       float sdSphere(in vec3 p) {
         p.y += sin(iTime*.5)*.1-3.;
         p.xz *= rot(p.y*.7+iTime);
-      	float g = sdGyroid(p);
+      	float g = sdGyroid(p*u_value1);
+        // return max(g, sdBox(abs(p)+.1, vec3(3.)));
         return max(g, length(abs(p)+.1)-4.);
       }
 
@@ -170,7 +108,12 @@
         return t;
       }
 
-      vec3 makeSphereColor(in vec3 n) {
+      vec3 makeSphereColor(in vec3 n, in vec3 p) {
+        float x = atan(p.z, p.x);
+        float y = atan(p.z, p.y);
+        vec2 uv = vec2(x,y)/2.;
+        vec3 col = texture2D(u_texture, uv).rgb;
+        return col;
         vec3 albd = vec3(1.);
         vec3 dif = vec3(.6,.98,.78)*(1.-n.y);
         dif += vec3(.6,.8,.98)*(1.-n.z);
@@ -217,13 +160,13 @@
       vec3 sky(vec3 rd) {
         float n = max(0., rd.y);
         n += .5;
-        return mix(vec3(.53, .65, .89), vec3(.89, .65, .53), n);
+        return 1.-mix(vec3(.53, .65, .89), vec3(.89, .65, .53), n)*u_value2*4.;
       }
 
       void mainImage(out vec4 fragColor, in vec2 fragCoord) {
         vec2 uv = (fragCoord.xy-.5*iResolution.xy)/iResolution.y;
         float cs = iTime * .1;
-        vec3 ro = vec3(cos(cs), 0., sin(cs))*(15.+sin(cs*3.)*3.)+vec3(0,1,0);
+        vec3 ro = vec3(cos(cs), 0., sin(cs))*(15.+sin(cs*.1)*3.)+vec3(0,1,0);
         vec3 rd = makeRay(ro, uv);
 
         // glitch
@@ -260,11 +203,11 @@
             p = p+r*t;
             n = getSphereNormal(p);
 
-            vec3 c = makeSphereColor(n)*.96;
+            vec3 c = makeSphereColor(n, p)*.96;
             col = mix(c, scl, smoothstep(0., 1., t/70.));
 
           } else {
-            col += occ;
+            col -= occ;
           }
         }
 
@@ -273,12 +216,12 @@
         if(isHit) {
           p = ro+rd*t;
           n = getSphereNormal(p);
-          col = makeSphereColor(n);
+          col = makeSphereColor(n, p);
         } else {
-          col += vec3(occ);
+          col -= vec3(occ);
         }
 
-        float pw = 1.8;
+        float pw = 1.8*u_value3*4.;
         col = vec3(
           pow(col.r, pw),
           pow(col.g, pw),
@@ -287,12 +230,4 @@
 
         fragColor = vec4(col, 1.);
       }
-    </script>
-    <div id="app"></div>
-    <img
-      src="https://aodnawg.github.io/glitcher/sample.e5f6977c.jpg"
-      id="tex"
-    />
-    <script src="https://aodnawg.github.io/glitcher/src.0b8ae9f2.js"></script>
-  </body>
-</html>
+    </script> <div id="app"></div> <img src="https://aodnawg.github.io/glitcher/sample.e5f6977c.jpg" id="tex"> <script src="https://aodnawg.github.io/glitcher/src.3c419d5b.js"></script> </body></html>
